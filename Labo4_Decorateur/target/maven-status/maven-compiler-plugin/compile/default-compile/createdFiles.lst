@@ -1,4 +1,3 @@
-com\mycompany\labo4_decorateur\ISortie.class
 com\mycompany\labo4_decorateur\DecorateurRepeteur.class
 com\mycompany\labo4_decorateur\Leibniz.class
 com\mycompany\labo4_decorateur\DecorateurChronometreur.class
@@ -6,6 +5,10 @@ com\mycompany\labo4_decorateur\DecorateurCommande.class
 com\mycompany\labo4_decorateur\Labo4_Decorateur.class
 com\mycompany\labo4_decorateur\DecorateurDate.class
 com\mycompany\labo4_decorateur\SortieConsole.class
+com\mycompany\labo4_decorateur\MonteCarlo.class
+com\mycompany\labo4_decorateur\ISortie.class
+com\mycompany\labo4_decorateur\Labo4_Decorateur$1.class
+com\mycompany\labo4_decorateur\Labo4_Decorateur$Repeteur.class
 com\mycompany\labo4_decorateur\DecorateurCompteur.class
 com\mycompany\labo4_decorateur\ICommande.class
-com\mycompany\labo4_decorateur\MonteCarlo.class
+com\mycompany\labo4_decorateur\Labo4_Decorateur$Algo.class

@@ -11,26 +11,88 @@ import java.text.SimpleDateFormat;
  *
  * @author Marc-Andre Couturier
  */
-public class Labo4_Decorateur {
-
-    public static void main(String[] args) {
-        ISortie sortie= new SortieConsole(); 
-        //ICommande leibniz = assembleurDeCommande(new Leibniz(2_100_000_000), 10);
-        ICommande leibniz = assembleurDeCommande(new Leibniz(Integer.MAX_VALUE -10), 10);
-        ICommande monteCarlo = assembleurDeCommande(new MonteCarlo(210_000_000), 10); // 10 fois moins sinon ca prenait 35 secondes
-        leibniz.executer(sortie);
-        monteCarlo.executer(sortie);
-       
-       
+public class Labo4_Decorateur 
+{
+    enum Algo
+    {
+        LEIBNIZ,
+        MONTECARLO
     }
     
-    public static ICommande assembleurDeCommande(ICommande commande, int n)
+    static class Repeteur // je voulais juste une struc
     {
-        ICommande compteur = new DecorateurCompteur(commande);      
-        ICommande chrono = new DecorateurChronometreur(compteur);
-        ICommande dateur = new DecorateurDate(chrono);
-        return  new DecorateurRepeteur(dateur,n);       
+        boolean estActif_;
+        int nbRepetition_;
+        
+        public Repeteur(boolean estActif, int nbRepetition )
+        {
+            estActif_ = estActif;
+            nbRepetition_ = nbRepetition;
+        }           
     }
+    
+    
+
+    public static void main(String[] args) 
+    {
+        ISortie sortie= new SortieConsole(); 
+        ICommande leibniz = assembleurDeCommande(Algo.LEIBNIZ, 2_100_000_000, true, true,true,new Repeteur(true,10));
+        ICommande monteCarlo = assembleurDeCommande(Algo.MONTECARLO, 210_000_000, true, true,true,new Repeteur(true,10)); // iterateur /10  sinon ca prenait 35 secondes
+        leibniz.executer(sortie);
+        monteCarlo.executer(sortie);   
+    }
+    
+
+    
+    public static ICommande assembleurDeCommande(Algo algo, int iterateur, boolean compteur, boolean chrono, boolean date, Repeteur repeteur )
+    {
+        ICommande retour;
+        switch(algo)
+        {
+            case LEIBNIZ:
+                retour = new Leibniz(iterateur);
+                break;
+            default:
+                retour = new MonteCarlo(iterateur);
+        }
+        if(compteur)
+        {
+            retour = new DecorateurCompteur(retour);
+        }
+        if(chrono)
+        {
+            retour = new DecorateurChronometreur(retour);
+        }
+        if(date)
+        {
+            retour = new DecorateurDate(retour);
+        }
+        if(repeteur.estActif_)
+        {
+            retour = new DecorateurRepeteur(retour, repeteur.nbRepetition_);
+        }
+        return  retour;       
+    }
+}
+
+
+interface ISortie
+{
+    void ecrire( String txt );
+}
+
+class  SortieConsole implements ISortie
+{
+   @Override
+   public void ecrire(String txt)
+    {
+        System.out.println(txt);
+    }
+}
+
+interface ICommande
+{ 
+    void executer(ISortie sortie);
 }
 
 class Leibniz implements ICommande
@@ -60,25 +122,6 @@ class Leibniz implements ICommande
         approximationPi *= 4.0;
         sortie.ecrire("\nAlgo:\tLeibniz\nPi\t" + String.valueOf(approximationPi));
     }
-}
-
-interface ISortie
-{
-void ecrire( String txt );
-}
-
-class  SortieConsole implements ISortie
-{
-   @Override
-   public void ecrire(String txt)
-    {
-        System.out.println(txt);
-    }
-}
-
-interface ICommande
-{
-void executer(ISortie sortie);
 }
 
 
